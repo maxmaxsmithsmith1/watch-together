@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Together</title>
+    <style>
+        video {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        Other user is:
+        <span id="connectivityElement">OFFLINE</span>
+    </div>
+
+    <div>
+        Download Status:
+        <span id="downloadStatus"></span>
+    </div>
+
+    <form>
+        <div class="form-group">
+          <label for="downloadAddressInput">Download Address:</label>
+          <input type="email" class="form-control" id="downloadAddressInput" placeholder="Download Adress">
+        </div>
+
+        <button type="button" id="setAddressButton" class="btn btn-primary">Download</button>
+    </form>
+
+    <div>
+        Other user video status: 
+        <span id="statusElement"></span>
+    </div>
+
+    <video
+        id="videoJS"
+        class="video-js"
+        controls
+        muted
+        preload="auto"
+        width="1100"
+        height="264"
+        data-setup="{}"
+        >
+        <source src="/video?video=downloaded.mp4" type="video/mp4"/>
+        
+        <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a
+        web browser that
+        </p>
+    </video>
+
+    <script src="./js/socket.io.min.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+</html>
