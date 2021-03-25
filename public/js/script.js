@@ -5,14 +5,18 @@ const statusElement = document.getElementById('statusElement')
 const connectivityElement = document.getElementById('connectivityElement')
 const setAddressButtonElement = document.getElementById('setAddressButton')
 const downloadStatusElement = document.getElementById('downloadStatus')
+const cancelDownloadButton = document.getElementById('cancelDownloadButton')
 
 const setStatus = text => { statusElement.innerText = text }
 const setConnectivityStatus = text => { connectivityElement.innerText = text }
 const setDownloadStatus = text => { downloadStatusElement.innerText = text }
 const disableSetAddressButtonElement = () => setAddressButtonElement.disabled = true
 const enableSetAddressButtonElement = () => setAddressButtonElement.disabled = false
+const disableCancelDownloadButtonElement = () => cancelDownloadButton.disabled = true
+const enableCancelDownloadButtonElement = () => cancelDownloadButton.disabled = false
 const disableVideo = () => videoDOM.controls = false
 const enableVideo = () => videoDOM.controls = true
+const reloadVideo = () => videoDOM.load()
 
 let ignoreSeekingEmit = false
 let ignorePauseEmit = false
@@ -27,6 +31,10 @@ setAddressButtonElement.addEventListener('click', function () {
 
         socket.emit('downloadFile', address)
     }
+}, false)
+
+cancelDownloadButton.addEventListener('click', function () {
+    socket.emit('cancelDownload')
 }, false)
 
 // video events
@@ -64,8 +72,8 @@ videoDOM.onwaiting = function () {
 }
 
 // socket
-socket.on('setAddress', function (address) {
-    enableSetAddressButtonElement()
+socket.on('setAddress', function () {
+    reloadVideo()
 })
 
 socket.on('pause', function () {
@@ -125,3 +133,26 @@ socket.on('serverError', function (err) {
 socket.on('serverLog', function (log) {
     console.err('server Log', log)
 })
+
+socket.on('isServerDownloading', function (isDownloading) {
+    if (isDownloading) {
+        disableSetAddressButtonElement()
+        enableCancelDownloadButtonElement()
+    } else {
+        enableSetAddressButtonElement()
+        disableCancelDownloadButtonElement()
+    }
+})
+
+// add file uploader
+const uploader = new SocketIOFileUpload(socket);
+
+uploader.listenOnInput(document.getElementById("siofu_input"));
+
+uploader.addEventListener("complete", function(){
+    document.getElementById('subtitleUploadStatus').innerText = "SUCCESSFUL"
+});
+
+uploader.addEventListener("error", function(){
+    console.error('error')
+});

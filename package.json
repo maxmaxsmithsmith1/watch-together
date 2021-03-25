@@ -11,6 +11,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "got": "^11.8.2",
-    "socket.io": "^3.1.2"
+    "socket.io": "^3.1.2",
+    "socketio-file-upload": "^0.7.3",
+    "srt-to-vtt": "^1.1.3"
   }
 }

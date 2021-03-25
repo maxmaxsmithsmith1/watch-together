@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watch Together</title>
+    <link rel="stylesheet" href="./css/video-js.css">
     <style>
         video {
             outline: none;
@@ -30,6 +31,7 @@
         </div>
 
         <button type="button" id="setAddressButton" class="btn btn-primary">Download</button>
+        <button type="button" id="cancelDownloadButton" class="btn btn-primary">Cancel Download Button</button>
     </form>
 
     <div>
@@ -40,14 +42,15 @@
     <video
         id="videoJS"
         class="video-js"
-        controls
         muted
+        controls
         preload="auto"
         width="1100"
         height="264"
         data-setup="{}"
         >
-        <source src="/video?video=downloaded.mp4" type="video/mp4"/>
+        <source src="/video" type="video/mp4"/>
+        <track kind='subtitles' src='./videos/downloaded.vtt' srclang='en' label='English' />
         
         <p class="vjs-no-js">
         To view this video please enable JavaScript, and consider upgrading to a
@@ -55,7 +58,15 @@
         </p>
     </video>
 
+    <div>
+        Upload Subtitle:
+        <input id="siofu_input" type="file" accept=".srt" name="subtitle" />
+        <span id="subtitleUploadStatus"></span>
+    </div>
+
     <script src="./js/socket.io.min.js"></script>
+    <script src="./js/video.min.js"></script>
+    <script src="./js/socketio-file-upload.js"></script>
     <script src="./js/script.js"></script>
 </body>
 </html>
