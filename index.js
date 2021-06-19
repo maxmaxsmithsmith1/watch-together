@@ -10,6 +10,7 @@ const server = require('http').createServer(app);
 const siofu = require("socketio-file-upload");
 const srt2vtt = require('srt-to-vtt');
 const URL = require("url");
+const hbjs = require('handbrake-js')
 const io = require('socket.io')(server, {
     cors: {
         origin: "*",
@@ -210,7 +211,7 @@ io.on('connection', client => {
 
             io.emit('isServerDownloading', isDownloading);
         }, () => {
-            io.emit('setAddress', '/video')
+            // io.emit('setAddress', '/video') // HAS ERROR on non MKV format
 
             isDownloading = false;
 
@@ -280,4 +281,21 @@ function download(url, filepath, onError, onDone, onProgress) {
     return downloadStream
 }
 
-
+function convertNonMKVtoMKV (filePath) {
+    return new Promise((resolve, reject) => {
+        hbjs.spawn({ input: filePath, output: filePath.replace(/\.[^/.]+$/, '.mkv') })
+        .on('error', err => {
+            reject(err)
+        })
+        .on('progress', progress => {
+            console.log(
+            'Percent complete: %s, ETA: %s',
+            progress.percentComplete,
+            progress.eta
+            )
+        })
+        .on('complete', () => {
+            resolve()
+        })
+    })
+}
