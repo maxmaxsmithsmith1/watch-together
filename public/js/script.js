@@ -6,6 +6,8 @@ const connectivityElement = document.getElementById('connectivityElement')
 const setAddressButtonElement = document.getElementById('setAddressButton')
 const downloadStatusElement = document.getElementById('downloadStatus')
 const cancelDownloadButton = document.getElementById('cancelDownloadButton')
+const setFileButton = document.getElementById('setFileButton')
+const fileLoadVideo = document.getElementById('fileLoadVideo')
 
 const setStatus = text => { statusElement.innerText = text }
 const setConnectivityStatus = text => { connectivityElement.innerText = text }
@@ -17,6 +19,7 @@ const enableCancelDownloadButtonElement = () => cancelDownloadButton.disabled = 
 const disableVideo = () => videoDOM.controls = false
 const enableVideo = () => videoDOM.controls = true
 const reloadVideo = () => videoDOM.load()
+const setAddressVideo = (url) => videoDOM.src = url
 
 let ignoreSeekingEmit = false
 let ignorePauseEmit = false
@@ -35,6 +38,20 @@ setAddressButtonElement.addEventListener('click', function () {
 
 cancelDownloadButton.addEventListener('click', function () {
     socket.emit('cancelDownload')
+}, false)
+
+setFileButton.addEventListener('click', function () {
+    fileLoadVideo.click()
+}, false)
+
+fileLoadVideo.addEventListener('change', function (event) {
+    const file = event.target.files.item(0)
+
+    const url = URL.createObjectURL(file)
+
+    setAddressVideo(url)
+
+    reloadVideo()
 }, false)
 
 // video events
